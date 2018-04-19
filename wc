@@ -1,0 +1,153 @@
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+void charnum(char *fname);//-c 字符数 
+void wordnum(char *fname);//-w 单词数 
+void sentencenum(char *fname);//-s 句子数 
+void othernum(char *fname);//-o 附加项  包括代码行，空行，注释行
+int main(int argc, char*argv[]){
+	FILE *fp;
+	while(1){
+		if((fp=fopen(argv[2],"r"))==NULL)
+           {    
+               printf("该文件不存在！\n\n\n");
+               scanf("%s%s%s",argv[0],argv[1],argv[2]);
+               continue;
+        }
+        
+        else if(strcmp(argv[1],"-c")==0){
+        	charnum(argv[2]);
+        }
+        else if(strcmp(argv[1],"-w")==0){
+        	wordnum(argv[2]);
+        }
+        else if(strcmp(argv[1],"-s")==0){
+        	sentencenum(argv[2]);
+        }
+        else if(strcmp(argv[1],"-o")==0){
+        	othernum(argv[2]);
+        }
+        else if(strcmp(argv[1],"exit")){
+        	break;
+        }
+        else{
+        	printf("input cmd wrong");
+        }
+        printf("\n\n");
+        scanf("%s%s%s",argv[0],argv[1],argv[2]);
+	}
+	return 0;
+}
+ 
+void charnum(char *fname){
+	 FILE *fp=NULL;
+     int c = 0;
+     char ch;
+     if ((fp = fopen(fname , "r")) == NULL){
+     	printf("file read failure.");
+     	exit(0);
+     }
+     ch = fgetc(fp);
+     while (ch != EOF){
+     	c++;
+     	ch = fgetc(fp);
+     }
+     printf("字符数为：%d\n",c);
+     fclose(fp);
+}
+
+void wordnum(char *fname){
+	 FILE *fp=NULL;
+     int w = 0;
+     char ch;
+     if ((fp = fopen(fname , "r")) == NULL){
+     	printf("file read failure.");
+     	exit(0);
+     }
+     ch=fgetc(fp);
+     while(ch!=EOF){
+     	 if ((ch>='a'&&ch<='z')||(ch >= 'A'&&ch <='Z') || (ch >= '0'&&ch <= '9'))
+     	 {
+ 	     	while ((ch >= 'a'&&ch <= 'z') || (ch >= 'A'&&ch <= 'Z') || (ch >= '0'&&ch <= '9') || ch == '-'
+			  ||ch=='\''){
+  				ch=fgetc(fp);
+  			}
+  			w++;
+  			ch=fgetc(fp);
+ 	     }
+ 	     else{
+     	 	ch=fgetc(fp);
+     	 }
+     }
+     printf("单词数为：%d\n",w);
+     fclose(fp);
+}
+
+void sentencenum(char *fname){
+	 FILE *fp=NULL;
+     int s = 0;
+     char ch;
+     if ((fp = fopen(fname , "r")) == NULL){
+     	printf("file read failure.");
+     	exit(0);
+     }
+     ch=fgetc(fp);
+     while(ch!=EOF){
+     	if(ch=='.'||ch=='?'||ch=='!'){
+	     	s++;
+	     	ch=fgetc(fp);
+	     }
+	     else{
+     		ch=fgetc(fp);
+     	}
+     }
+     printf("句子数为：%d\n",s);
+     fclose(fp);
+}
+
+void othernum(char *fname){
+	 FILE *fp=NULL;
+     int cl = 0,el=0,nl=0;
+     char ch;
+     if ((fp = fopen(fname , "r")) == NULL){
+     	printf("file read failure.");
+     	exit(0);
+     }
+     ch=fgetc(fp);
+     while (ch != EOF)
+     {
+        if (ch=='\n')
+        {
+            ch = fgetc(fp);
+            while (ch=='\n')
+            {
+                el++;
+                ch = fgetc(fp);
+            }
+        }
+        else if (ch == '/')
+        {
+            ch = fgetc(fp);
+            if (ch == '/')
+            	while (ch != '\n')
+                {
+                    ch = fgetc(fp);
+                }
+                nl++;
+            ch = fgetc(fp);
+        }
+        else
+        {
+            cl++;
+            while (ch != '\n'&&ch != '/'&&ch != EOF)
+            {
+                ch = fgetc(fp);
+            }
+        }
+
+    }
+    printf("代码行数为：%d.\n", cl);
+    printf("空行数为 ：%d.\n", el);
+    printf("注释行数为 ：%d.\n", nl);
+    fclose(fp);
+}
