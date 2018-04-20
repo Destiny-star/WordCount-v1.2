@@ -1,0 +1,50 @@
+#include<stdio.h>
+#include<string.h>
+#include<stdlib.h>
+void charnum(char *fname);//-c 字符数 
+void wordnum(char *fname);//-w 单词数 
+void sentencenum(char *fname);//-s 句子数 
+void othernum(char *fname);//-o 附加项  包括代码行，空行，注释行
+int main(int argc, char*argv[]){
+	FILE *fp;
+	while(1){
+		if((fp=fopen(argv[2],"r"))==NULL)
+           {    
+               printf("该文件不存在！\n\n\n");
+               scanf("%s%s%s",argv[0],argv[1],argv[2]);
+               continue;
+        }
+
+        else if(strcmp(argv[1],"-c")==0){
+        	charnum(argv[2]);
+        }
+        else if(strcmp(argv[1],"-w")==0){
+        	wordnum(argv[2]);
+        }
+        else if(strcmp(argv[1],"-s")==0){
+        	sentencenum(argv[2]);
+        }
+        else if(strcmp(argv[1],"-o")==0){
+        	othernum(argv[2]);
+        }
+        else if(strcmp(argv[1],"exit")){
+        	break;
+        }
+        else{
+        	printf("input cmd wrong");
+        }
+	}
+	return 0;
+} 
+void charnum(char *fname){
+
+}
+void wordnum(char *fname){
+
+}
+void sentencenum(char *fname){
+
+}
+void othernum(char *name){
+
+}
